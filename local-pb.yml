@@ -1,0 +1,12 @@
+- hosts: localhost
+  vars:
+    bootcamps: 
+      - AWS
+      - Azure
+      - GCP
+      - OCI
+      - DevOps
+  tasks:
+    - name: Listing TCB's Bootcamps
+      debug:
+        msg: "{{ bootcamps[2] }}"

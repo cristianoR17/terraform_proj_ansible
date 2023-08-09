@@ -1,0 +1,16 @@
+- name: Installing Apache for All Hosts
+  hosts: all
+  become: yes
+  tasks:
+    - name:  Setup Apache - Debian
+      apt: 
+        name: apache2
+        state: present
+      when: ansible_distribution == 'Debian'
+
+    - name: Setup Apache - RHEL
+      yum:
+        name: httpd
+        state: present
+      when: ansible_distribution == 'RedHat'
+

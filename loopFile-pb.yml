@@ -1,0 +1,19 @@
+- hosts: localhost
+  tasks:
+    - name: Creating Folder
+      file:
+        path: /home/ubuntu/ansible/{{ item }}
+        state: absent
+      loop:
+        - folder01
+        - folder02
+        - folder03
+
+    - name: Creating file
+      file:
+         path: /home/ubuntu/ansible/{{ item.dir }}/{{ item.file }}
+         state: touch
+      with_items:
+        { dir: "folder01", file: "file01"}
+        { dir: "folder02", file: "file02"}
+        { dir: "folder03", file: "file03"}

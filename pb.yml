@@ -1,0 +1,41 @@
+- name: TCB DevOps - ANSIBLE
+  hosts: host02
+  become: yes
+  gather_facts: no
+  
+  vars_files: "vars.yml"
+  
+  tasks:
+    - name: Installing 'nginx'
+      yum:
+        update_cache: yes
+        name: nginx
+        state: latest
+
+    - name: Starting 'nginx'
+      shell: systemctl start nginx
+      register: nginx_result
+      changed_when: nginx_result.stdout != ""
+
+    - debug:
+        msg: "{{ nginx_result.stdout }}"  
+
+    - name: Granting 'nginx' starting from boot process
+      service:
+        name: nginx
+        enabled: yes
+
+    - debug:
+        msg:
+          - "{{ current_port }}"
+          - "{{ new_port }}"
+
+    - command: "sed -i 's/{{ current_port }}/{{ new_port }}/g' /etc/nginx/nginx.conf"      
+    
+    - shell: nginx -t
+      register: nginx_test_conf_result
+
+    - debug:
+        var: nginx_test_conf_result
+
+    - shell: systemctl restart nginx      
